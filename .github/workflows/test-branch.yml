@@ -22,7 +22,7 @@ jobs:
         steps:
             - name: Pick branch
               run: |
-                echo "Branch: $SYNC_BRANCH"
+                echo "Branch: $SYNC_BRANCH" | tee -a $GITHUB_STEP_SUMMARY
               env:
                   SYNC_BRANCH: ${{ inputs.syncBranch || github.ref_name }}
 
