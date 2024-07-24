@@ -1,0 +1,33 @@
+name: test-branch
+
+on:
+    push:
+      branches:
+        - stage
+        - main
+    workflow_dispatch:
+      inputs:
+        syncBranch:
+          description: 'Branch to sync'
+          required: true
+          default: 'stage'
+          type: choice
+          options:
+            - 'stage'
+            - 'main'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Pick branch
+              run: |
+                echo "Branch: $SYNC_BRANCH"
+              env:
+                  SYNC_BRANCH: ${{ inputs.syncBranch || github.ref_name }}
+
+            - name: Checkout Repo
+              uses: actions/checkout@v2
+              with:
+                persist-credentials: false
+                ref: ${{ inputs.syncBranch || github.ref_name }}
